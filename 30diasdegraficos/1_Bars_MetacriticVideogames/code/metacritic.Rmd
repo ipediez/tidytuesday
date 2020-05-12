@@ -2,7 +2,7 @@
 title: "Videojuegos"
 author: "Irene Perez"
 date: "12/5/2020"
-output: html_document
+output: rmarkdown::github_document
 ---
 
 ```{r setup, include=FALSE}
@@ -11,7 +11,6 @@ knitr::opts_chunk$set(echo = TRUE)
 
 
 ```{r library, include=FALSE}
-library(plotly)
 library(dplyr)
 library(ggplot2)
 library(RColorBrewer)
@@ -31,7 +30,7 @@ Los datos se obtuvieron de [Kaggle](https://www.kaggle.com/skateddu/metacritic-g
 En el dataset se recoge un total de `r dim(videogames)[1]` videojuegos diferentes. Para analizar la evolución de la industria de los videojuegos, he decidido hacer un gráfico representando los videojuegos disponibles en la base de datos por su año de publicación. 
 
 ```{r table}
-kable(videogames[1:15,], format = "html") %>% scroll_box(width="100%", height ="300px")
+kable(videogames[1:5,])
 ```
 
 
@@ -41,21 +40,14 @@ videogames <- separate(videogames,
                        into = c("month_day", "year"),
                        sep = ", ")
 
+videogames_year = as.data.frame(table(videogames$year))
+names(videogames_year) = c("Year", "Freq")
 
-fig <- plot_ly(
-  x = table(videogames$year),
-  y = names(table(videogames$year)),
-  type = "bar",
-  color = I("#A6DBA0")
-)
-
-fig <- fig %>% layout(
-  title = "Videojuegos publicados por año",
-  xaxis = list(title="Número de videojuegos"),
-  yaxis = list(title="Año de publicación")
-)
-
-fig
+ggplot(data=videogames_year, aes(x=Year, y=Freq)) +
+  geom_bar(stat = "identity", fill= "#A6DBA0") +
+  labs(x="Año de publicación", y="Número de videojuegos") +
+  ggtitle("Videojuegos publicados por año") +
+  theme_minimal()
 ```
 
 ### Videojuegos por plataforma y género
@@ -79,20 +71,16 @@ Si analizamos toda la base de datos, obtenemos los videojuegos por plataforma y 
 ```{r platform}
 
 
-fig <- videogames %>% count(platform, genre)
-fig$platform <- droplevels(fig$platform)
-fig <- fig %>% plot_ly() %>% 
-  add_trace (x= ~platform, y= ~n, color = ~genre,
-             colors = brewer.pal(8, "PRGn"), 
-             type = "bar")
+plataforma_genero <- videogames %>% count(platform, genre)
+plataforma_genero$platform <- droplevels(plataforma_genero$platform)
+plataforma_genero <- as.data.frame(plataforma_genero)
 
-fig <- fig %>% layout(
-  title = "Videojuegos publicados por plataforma y género", 
-  xaxis = list(title="Plataformas"),
-  yaxis = list(title="Número de videojuegos")
-)
-
-fig
+ggplot(data=plataforma_genero, aes(x=platform, y=n, fill=genre)) +
+  geom_bar(stat = "identity", position=position_dodge()) +
+  scale_fill_brewer(palette ="PRGn") +
+  labs(x="Plataformas", y="Número de videojuegos", fill="Género") +
+  ggtitle("Videojuegos publicados por plataforma y género") +
+  theme_minimal()
 ```
 
 Los géneros más populares son Acción, Aventuras y/o una combinación de ambos en todas las plataformas. Las plataformas que más variedad de videojuegos tienen en su catálogo son PC y PS4. A penas se publican juegos de estrategia para plataformas que no sean PC, probablemente debido a cómo afecta a la jugabilidad de estos videojuegos no poder usar teclado y ratón. La plataforma para la que más juegos de deporte se publican es PS4, y es a su vez el género para el que menos juegos se publican en PC y Switch. Aunque la Switch es la plataforma con menos videojuegos acumulados desde 2013, es importante tener en cuenta que fue lanzada al mercado en marzo de 2017 y ya tiene unos niveles de videojuegos acumulados similares a los de la XONE: `r dim(videogames[videogames$platform == "Switch",])[1]` en la Switch frente a `r dim(videogames[videogames$platform == "XONE",])[1]` en la XONE.
