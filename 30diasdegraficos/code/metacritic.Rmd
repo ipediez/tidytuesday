@@ -1,0 +1,98 @@
+---
+title: "Videojuegos"
+author: "Irene Perez"
+date: "12/5/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r library, include=FALSE}
+library(plotly)
+library(dplyr)
+library(ggplot2)
+library(RColorBrewer)
+library(tidyr)
+library(knitr)
+library(kableExtra)
+
+videogames <- read.csv("../data/metacritic_games.csv")
+```
+
+## Metacritic games stats 2011-2019
+
+Los datos se obtuvieron de [Kaggle](https://www.kaggle.com/skateddu/metacritic-games-stats-20112019/data) y están disponibles en dicha plataforma. Metacritic es una página web que recoge opiniones de películas, series de televisión, álbumes de música y videojuegos. El dataset contiene una variedad de estadísticas desde enero de 2011 hasta marzo de 2019. Todos los gráficos mostrados a continuación siguen paletas "Colorblind safe" o aptas para daltónicos. 
+
+### Videojuegos publicados por año
+
+En el dataset se recoge un total de `r dim(videogames)[1]` videojuegos diferentes. Para analizar la evolución de la industria de los videojuegos, he decidido hacer un gráfico representando los videojuegos disponibles en la base de datos por su año de publicación. 
+
+```{r table}
+kable(videogames[1:15,], format = "html") %>% scroll_box(width="100%", height ="300px")
+```
+
+
+```{r year}
+videogames <- separate(videogames,
+                       col = "release_date",
+                       into = c("month_day", "year"),
+                       sep = ", ")
+
+
+fig <- plot_ly(
+  x = table(videogames$year),
+  y = names(table(videogames$year)),
+  type = "bar",
+  color = I("#A6DBA0")
+)
+
+fig <- fig %>% layout(
+  title = "Videojuegos publicados por año",
+  xaxis = list(title="Número de videojuegos"),
+  yaxis = list(title="Año de publicación")
+)
+
+fig
+```
+
+### Videojuegos por plataforma y género
+
+En el dataset hay un total de `r length(summary(videogames$genre))` géneros diferentes, con entre 1 y 1846 entradas cada uno. Para mantener sólo los géneros más populares, he aplicado un filtro de 200 entradas como mínimo, de forma que sólo aquellos géneros con más de 200 videojuegos asociados se mantienen: 
+
+```{r mantener, include=FALSE}
+genres <- table(videogames$genre)
+
+keep <- names(genres[which(genres > 200)])
+videogames <- videogames %>% filter(genre %in% keep)
+videogames <- videogames %>% filter(platform %in% c("PC", "PS4", "Switch", "XONE"))
+videogames <- videogames %>% filter(year %in% c("2017", "2018", "2019", "2013", "2014", "2015", "2016"))
+```
+`r keep`
+
+También he eliminado del análisis plataformas obsoletas como la 3DS, VITA y WIIU, y he filtrado
+
+Si analizamos toda la base de datos, obtenemos los videojuegos por plataforma y género acumulados desde 2011. Sin embargo, tanto la PS4 como Xbox ONE fueron lanzadas al mercado en noviembre de 2013, por lo que los juegos anteriores a esa fecha se han mantenido fuera de este análisis. 
+
+```{r platform}
+
+
+fig <- videogames %>% count(platform, genre)
+fig$platform <- droplevels(fig$platform)
+fig <- fig %>% plot_ly() %>% 
+  add_trace (x= ~platform, y= ~n, color = ~genre,
+             colors = brewer.pal(8, "PRGn"), 
+             type = "bar")
+
+fig <- fig %>% layout(
+  title = "Videojuegos publicados por plataforma y género", 
+  xaxis = list(title="Plataformas"),
+  yaxis = list(title="Número de videojuegos")
+)
+
+fig
+```
+
+Los géneros más populares son Acción, Aventuras y/o una combinación de ambos en todas las plataformas. Las plataformas que más variedad de videojuegos tienen en su catálogo son PC y PS4. A penas se publican juegos de estrategia para plataformas que no sean PC, probablemente debido a cómo afecta a la jugabilidad de estos videojuegos no poder usar teclado y ratón. La plataforma para la que más juegos de deporte se publican es PS4, y es a su vez el género para el que menos juegos se publican en PC y Switch. Aunque la Switch es la plataforma con menos videojuegos acumulados desde 2013, es importante tener en cuenta que fue lanzada al mercado en marzo de 2017 y ya tiene unos niveles de videojuegos acumulados similares a los de la XONE: `r dim(videogames[videogames$platform == "Switch",])[1]` en la Switch frente a `r dim(videogames[videogames$platform == "XONE",])[1]` en la XONE.
