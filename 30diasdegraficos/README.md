@@ -11,8 +11,8 @@ Esta es la propuesta de gráficos para crear en los próximos 30 días, junto co
 
 | día | fecha | desafío | temática |
 |-----|-------|---------|----------|
-| 1 | 12 de mayo | barras / columnas | Estadísticas de videojuegos de Metacritic
-| 2 | 13 de mayo | líneas |
+| 1 | 12 de mayo | barras / columnas | [Estadísticas de videojuegos de Metacritic](https://www.kaggle.com/skateddu/metacritic-games-stats-20112019/data)
+| 2 | 13 de mayo | líneas | [Literatura científica relacionada con COVID-19](https://www.kaggle.com/allen-institute-for-ai/CORD-19-research-challenge)
 | 3 | 14 de mayo | puntos / burbujas |
 | 4 | 15 de mayo | gráficos con facetas |
 | 5 | 16 de mayo | diagramas de arco |
