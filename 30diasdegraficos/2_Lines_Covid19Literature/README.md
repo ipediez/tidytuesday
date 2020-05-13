@@ -1,0 +1,40 @@
+Covid-19 Literature
+================
+Irene Perez
+13/5/2020
+
+## Publicaciones sobre Covid-19 desde 2019
+
+Los datos se obtuvieron de
+[Kaggle](https://www.kaggle.com/allen-institute-for-ai/CORD-19-research-challenge),
+están disponibles en dicha plataforma y forman parte del COVID-19 Open
+Research Dataset Challenge (CORD-19). Aunque en el dataset se incluyen
+todas las publicaciones relacionadas con COVID-19, SARS-CoV 2 y
+coronavirus similares desde hace décadas, he filtrado los datos para ver
+su tendencia desde el 1 de enero de 2019 y desde el 1 de enero de 2020.
+
+``` r
+metadata <- read.csv("../CORD-19-research-challenge/metadata.csv")
+metadata$publish_time <- as.Date(as.character(metadata$publish_time))
+metadata <- metadata %>% filter(publish_time > as.Date("2019-01-01"))
+metadata <- metadata %>% filter(publish_time < as.Date("2020-05-01"))
+publications_day <- as.data.frame(table(metadata$publish_time))
+colnames(publications_day) <- c("Date", "n")
+publications_day$Date <- as.Date(as.character(publications_day$Date))
+```
+
+``` r
+ggplot(publications_day, aes(Date, n)) + geom_line(color="#00AFBB") +
+  scale_x_date() + xlab("") + ylab("Daily papers published") + theme_minimal()
+```
+
+![](covid_literature_files/figure-gfm/2019-1.png)<!-- -->
+
+``` r
+ggplot(publications_day, aes(Date, n)) + geom_line(color="#00AFBB") +
+  scale_x_date(limits=c(as.Date("2020-01-01"), NA)) + xlab("") + ylab("Daily papers published") + theme_minimal()
+```
+
+    ## Warning: Removed 344 row(s) containing missing values (geom_path).
+
+![](covid_literature_files/figure-gfm/2020-1.png)<!-- -->
