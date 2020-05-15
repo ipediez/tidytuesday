@@ -14,7 +14,7 @@ Esta es la propuesta de gráficos para crear en los próximos 30 días, junto co
 | 1 | 12 de mayo | barras / columnas | [Estadísticas de videojuegos de Metacritic](https://www.kaggle.com/skateddu/metacritic-games-stats-20112019/data)
 | 2 | 13 de mayo | líneas | [Literatura científica relacionada con COVID-19](https://www.kaggle.com/allen-institute-for-ai/CORD-19-research-challenge)
 | 3 | 14 de mayo | puntos / burbujas | [Encuestas LGBT EU](https://www.kaggle.com/ruslankl/european-union-lgbt-survey-2012)
-| 4 | 15 de mayo | gráficos con facetas |
+| 4 | 15 de mayo | gráficos con facetas | [Encuestas LGBT EU](https://www.kaggle.com/ruslankl/european-union-lgbt-survey-2012)
 | 5 | 16 de mayo | diagramas de arco |
 | 6 | 17 de mayo | gráficos de donut :doughnut: |
 | 7 | 18 de mayo | gráficos ridgeline |
