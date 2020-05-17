@@ -1,0 +1,89 @@
+---
+title: 'SpotifyR - Muse'
+author: "Irene Perez"
+date: "17/5/2020"
+output: rmarkdown::github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r library}
+library(spotifyr)
+library(ggplot2)
+```
+
+## Uso de las diferentes claves en distintos grupo de música
+
+Para este gráfico he decidido centrarme en dos artistas de estilos diferentes: MUSE y Dark Funeral. 
+
+```{r}
+Sys.setenv(SPOTIFY_CLIENT_ID = 'e50e70d763434cd0b8259f0f4d55ddf9')
+Sys.setenv(SPOTIFY_CLIENT_SECRET = '748345630630407786bd9e293690001c')
+access_token <- get_spotify_access_token()
+```
+
+
+```{r data, warning=FALSE}
+
+muse <- get_artist_audio_features("MUSE")
+dark_funeral <- get_artist_audio_features("Dark funeral")
+```
+
+
+```{r muse, warning=FALSE}
+data <- data.frame(table(muse$key_name))
+colnames(data) <- c("Claves", "Conteos")
+# Calcular porcentajes
+data$fraccion <- data$Conteos/ sum(data$Conteos)
+# Calcular porcentajes cumulativos (la parte superior de cada rectángulo)
+data$ymax <- cumsum(data$fraccion)
+# Calcular la parte inferior de cada rectángulo
+data$ymin <- c(0, head(data$ymax, n=-1))
+# Calcular posicion de las etiquetas
+data$posicionEtiqueta <- (data$ymax + data$ymin) /2
+# Etiquetas
+data$etiqueta <- paste0(data$Claves, "\n valor: ", data$Conteos)
+```
+
+```{r p1}
+ggplot(data, aes(ymax=ymax, ymin=ymin, xmax=4, xmin=3, fill=Claves)) +
+  geom_rect() +
+  geom_label( x=3.5, aes(y= posicionEtiqueta, label= etiqueta), size=3) +
+  scale_fill_brewer(palette="Paired") +
+  coord_polar(theta="y") +
+  xlim(c(2, 4)) +
+  theme_void() +
+  theme(legend.position = "none") +
+  labs(title="Claves que utiliza MUSE en sus canciones")
+```
+
+```{r df, warning=FALSE}
+data <- data.frame(table(dark_funeral$key_name))
+colnames(data) <- c("Claves", "Conteos")
+# Calcular porcentajes
+data$fraccion <- data$Conteos/ sum(data$Conteos)
+# Calcular porcentajes cumulativos (la parte superior de cada rectángulo)
+data$ymax <- cumsum(data$fraccion)
+# Calcular la parte inferior de cada rectángulo
+data$ymin <- c(0, head(data$ymax, n=-1))
+# Calcular posicion de las etiquetas
+data$posicionEtiqueta <- (data$ymax + data$ymin) /2
+# Etiquetas
+data$etiqueta <- paste0(data$Claves, "\n valor: ", data$Conteos)
+```
+
+```{r p2}
+ggplot(data, aes(ymax=ymax, ymin=ymin, xmax=4, xmin=3, fill=Claves)) +
+  geom_rect() +
+  geom_label( x=3.5, aes(y= posicionEtiqueta, label= etiqueta), size=3) +
+  scale_fill_brewer(palette="Paired") +
+  coord_polar(theta="y") +
+  xlim(c(2, 4)) +
+  theme_void() +
+  theme(legend.position = "none") +
+  labs(title="Claves que utiliza Dark Funeral en sus canciones")
+```
+
+
