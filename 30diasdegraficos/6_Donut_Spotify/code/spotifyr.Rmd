@@ -19,8 +19,8 @@ library(ggplot2)
 Para este gráfico he decidido centrarme en dos artistas de estilos diferentes: MUSE y Dark Funeral. 
 
 ```{r}
-Sys.setenv(SPOTIFY_CLIENT_ID = 'e50e70d763434cd0b8259f0f4d55ddf9')
-Sys.setenv(SPOTIFY_CLIENT_SECRET = '748345630630407786bd9e293690001c')
+Sys.setenv(SPOTIFY_CLIENT_ID = 'XXXXXXXXXXXXXXXXXXXXXXXXXXXx')
+Sys.setenv(SPOTIFY_CLIENT_SECRET = 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXx')
 access_token <- get_spotify_access_token()
 ```
 
