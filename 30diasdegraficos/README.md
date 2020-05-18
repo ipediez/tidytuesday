@@ -16,8 +16,8 @@ Esta es la propuesta de gráficos para crear en los próximos 30 días, junto co
 | 3 | 14 de mayo | puntos / burbujas | [Encuestas LGBT EU](https://www.kaggle.com/ruslankl/european-union-lgbt-survey-2012)
 | 4 | 15 de mayo | gráficos con facetas | [Encuestas LGBT EU](https://www.kaggle.com/ruslankl/european-union-lgbt-survey-2012)
 | 5 | 16 de mayo | diagramas de arco | [Moviegalaxies - Star Wars: Episode IV](https://moviegalaxies.com/movies/view/773/star-wars-episode-iv-a-new-hope/#)
-| 6 | 17 de mayo | gráficos de donut :doughnut: |
-| 7 | 18 de mayo | gráficos ridgeline |
+| 6 | 17 de mayo | gráficos de donut :doughnut: | SpotifyR
+| 7 | 18 de mayo | gráficos ridgeline | [Temperaturas Valencia](dataupv.webs.upv.es/datos-historicos-de-la-observacion-meteorologica-en-valencia/)
 | 8 | 19 de mayo | gráficos de contorno |
 | 9 | 20 de mayo | gráficos de áreas apiladas |
 | 10 | 21 de mayo | ¡explorar paletas de colores! |
